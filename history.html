@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Transactions | Smart Expense Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        💰 Smart Expense Tracker
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Dashboard</a>
+        <a href="/history">History</a>
+        <a href="/budget">Budget</a>
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    <div class="panel history-panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h1>
+                    📜 Transaction History
+                </h1>
+
+                <p class="history-subtitle">
+                    Search and manage all your transactions
+                </p>
+
+            </div>
+
+            <a href="/" class="view-link">
+                ← Dashboard
+            </a>
+
+        </div>
+
+
+        <!-- FILTERS -->
+
+        <div class="history-filters">
+
+            <input
+                type="text"
+                id="searchTransaction"
+                placeholder="🔍 Search transaction..."
+            >
+
+
+            <select id="typeFilter">
+
+                <option value="all">
+                    All Types
+                </option>
+
+                <option value="income">
+                    Income
+                </option>
+
+                <option value="expense">
+                    Expense
+                </option>
+
+            </select>
+
+
+            <select id="categoryFilter">
+
+                <option value="all">
+                    All Categories
+                </option>
+
+                {% for transaction in transactions %}
+
+                    <option value="{{ transaction['category'] }}">
+                        {{ transaction['category'] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        {% if transactions %}
+
+        <div class="history-list" id="transactionList">
+
+            {% for transaction in transactions %}
+
+            <div
+                class="history-item transaction-row"
+
+                data-type="{{ transaction['type'] }}"
+
+                data-category="{{ transaction['category'] }}"
+
+                data-search="
+                    {{ transaction['category'] }}
+                    {{ transaction['note'] or '' }}
+                    {{ transaction['payment_method'] }}
+                    {{ transaction['date'] }}
+                "
+            >
+
+                <div class="transaction-left">
+
+                    <div class="transaction-icon">
+
+                        {% if transaction["type"] == "expense" %}
+                            💸
+                        {% else %}
+                            💰
+                        {% endif %}
+
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+                            {{ transaction["category"] }}
+                        </h3>
+
+                        <p>
+
+                            {{ transaction["date"] }}
+
+                            •
+
+                            {{ transaction["payment_method"] }}
+
+                            {% if transaction["note"] %}
+
+                                • {{ transaction["note"] }}
+
+                            {% endif %}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="history-right">
+
+                    <span
+                        class="amount
+                        {% if transaction['type'] == 'expense' %}
+                            expense-text
+                        {% else %}
+                            income-text
+                        {% endif %}"
+                    >
+
+                        {% if transaction["type"] == "expense" %}
+
+                            - ₹{{ "%.2f"|format(transaction["amount"]) }}
+
+                        {% else %}
+
+                            + ₹{{ "%.2f"|format(transaction["amount"]) }}
+
+                        {% endif %}
+
+                    </span>
+
+
+                    <a
+                        href="/edit/{{ transaction['id'] }}"
+                        class="edit-btn"
+                        title="Edit transaction"
+                    >
+                        ✏️
+                    </a>
+
+
+                    <a
+                        href="/delete/{{ transaction['id'] }}"
+                        class="delete-btn"
+                        title="Delete transaction"
+                    >
+                        🗑️
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div
+            id="noResults"
+            class="empty-state"
+            style="display: none;"
+        >
+
+            <div>
+                🔍
+            </div>
+
+            <h3>
+                No transactions found
+            </h3>
+
+            <p>
+                Try another search or filter.
+            </p>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <div>
+                📊
+            </div>
+
+            <h3>
+                No transactions yet
+            </h3>
+
+            <p>
+                Add an income or expense to see it here.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    <p>
+        Smart Expense Tracker • Built with Flask
+    </p>
+
+</footer>
+
+
+<script>
+
+const searchInput =
+    document.getElementById("searchTransaction");
+
+const typeFilter =
+    document.getElementById("typeFilter");
+
+const categoryFilter =
+    document.getElementById("categoryFilter");
+
+const rows =
+    document.querySelectorAll(".transaction-row");
+
+const noResults =
+    document.getElementById("noResults");
+
+
+function filterTransactions() {
+
+    const search =
+        searchInput.value.toLowerCase().trim();
+
+    const type =
+        typeFilter.value;
+
+    const category =
+        categoryFilter.value;
+
+
+    let visibleCount = 0;
+
+
+    rows.forEach(function (row) {
+
+        const rowSearch =
+            row.dataset.search.toLowerCase();
+
+        const rowType =
+            row.dataset.type;
+
+        const rowCategory =
+            row.dataset.category;
+
+
+        const matchesSearch =
+            rowSearch.includes(search);
+
+
+        const matchesType =
+            type === "all" ||
+            rowType === type;
+
+
+        const matchesCategory =
+            category === "all" ||
+            rowCategory === category;
+
+
+        if (
+            matchesSearch &&
+            matchesType &&
+            matchesCategory
+        ) {
+
+            row.style.display = "flex";
+
+            visibleCount++;
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+
+    if (noResults) {
+
+        noResults.style.display =
+            visibleCount === 0
+                ? "block"
+                : "none";
+
+    }
+
+}
+
+
+searchInput.addEventListener(
+    "input",
+    filterTransactions
+);
+
+typeFilter.addEventListener(
+    "change",
+    filterTransactions
+);
+
+categoryFilter.addEventListener(
+    "change",
+    filterTransactions
+);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Income | Smart Expense Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">💰 Smart Expense Tracker</div>
+
+    <div class="nav-links">
+        <a href="/">Dashboard</a>
+        <a href="/history">History</a>
+        <a href="/budget">Budget</a>
+    </div>
+</nav>
+
+
+<main class="container">
+
+    <div class="form-page">
+
+        <div class="form-header">
+            <h1>💰 Add Income</h1>
+            <p>Record your income and keep your balance updated.</p>
+        </div>
+
+        <form method="POST" class="expense-form">
+
+            <div class="form-group">
+                <label for="amount">Amount (₹)</label>
+
+                <input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    placeholder="Enter income amount"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="category">Income Source</label>
+
+                <select id="category" name="category" required>
+
+                    <option value="">Select income source</option>
+
+                    <option value="Pocket Money">💵 Pocket Money</option>
+                    <option value="Salary">💼 Salary</option>
+                    <option value="Freelancing">💻 Freelancing</option>
+                    <option value="Scholarship">🎓 Scholarship</option>
+                    <option value="Gift">🎁 Gift</option>
+                    <option value="Other">📦 Other</option>
+
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="payment_method">Received Through</label>
+
+                <select id="payment_method" name="payment_method" required>
+
+                    <option value="">Select method</option>
+
+                    <option value="UPI">📱 UPI</option>
+                    <option value="Cash">💵 Cash</option>
+                    <option value="Bank Transfer">🏦 Bank Transfer</option>
+                    <option value="Other">💳 Other</option>
+
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="date">Date</label>
+
+                <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="note">Note</label>
+
+                <textarea
+                    id="note"
+                    name="note"
+                    rows="4"
+                    placeholder="Add a note about this income..."
+                ></textarea>
+            </div>
+
+
+            <div class="form-buttons">
+
+                <a href="/" class="cancel-btn">
+                    Cancel
+                </a>
+
+                <button type="submit" class="submit-income">
+                    💾 Save Income
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+
+<footer>
+    <p>Smart Expense Tracker • Built with Flask</p>
+</footer>
+
+</body>
+</html>
