@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Budget | Smart Expense Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        💰 Smart Expense Tracker
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Dashboard</a>
+        <a href="/history">History</a>
+        <a href="/budget">Budget</a>
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    <div class="form-page">
+
+        <div class="form-header">
+
+            <h1>🎯 Monthly Budget</h1>
+
+            <p>
+                Set and monitor your monthly spending limit.
+            </p>
+
+        </div>
+
+
+        <!-- BUDGET SUMMARY -->
+
+        <div class="budget-summary">
+
+            <div class="budget-box">
+
+                <span>
+                    Monthly Budget
+                </span>
+
+                <strong>
+                    ₹{{ "%.2f"|format(budget) }}
+                </strong>
+
+            </div>
+
+
+            <div class="budget-box">
+
+                <span>
+                    Total Spent
+                </span>
+
+                <strong class="expense-text">
+                    ₹{{ "%.2f"|format(expense) }}
+                </strong>
+
+            </div>
+
+
+            <div class="budget-box">
+
+                <span>
+                    Remaining
+                </span>
+
+                <strong
+                    class="{% if remaining < 0 %}
+                               expense-text
+                           {% else %}
+                               income-text
+                           {% endif %}"
+                >
+                    ₹{{ "%.2f"|format(remaining) }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        {% if budget > 0 %}
+
+            {% set percentage = (expense / budget * 100) %}
+
+            {% if percentage > 100 %}
+                {% set progress = 100 %}
+            {% else %}
+                {% set progress = percentage %}
+            {% endif %}
+
+
+            <!-- PROGRESS -->
+
+            <div class="budget-progress-panel">
+
+                <div class="progress-header">
+
+                    <span>
+                        Budget Usage
+                    </span>
+
+                    <strong>
+                        {{ "%.0f"|format(percentage) }}%
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        style="width: {{ progress }}%;"
+                    ></div>
+
+                </div>
+
+
+                {% if percentage >= 100 %}
+
+                    <div class="budget-alert danger">
+                        🚨 You have exceeded your monthly budget.
+                    </div>
+
+                {% elif percentage >= 80 %}
+
+                    <div class="budget-alert warning">
+                        ⚠️ You have used more than 80% of your budget.
+                    </div>
+
+                {% else %}
+
+                    <div class="budget-alert success">
+                        🎯 Your spending is within the budget.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- SET BUDGET FORM -->
+
+        <form
+            method="POST"
+            class="expense-form"
+        >
+
+            <div class="form-group">
+
+                <label for="amount">
+                    Set Monthly Budget (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    placeholder="Example: 10000"
+                    min="0"
+                    step="0.01"
+                    value="{{ budget if budget > 0 else '' }}"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <a
+                    href="/"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="submit-income"
+                >
+                    💾 Save Budget
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    <p>
+        Smart Expense Tracker • Built with Flask
+    </p>
+
+</footer>
+
+</body>
+
+</html>
