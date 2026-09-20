@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 
-DATABASE = "database.db"
+# Database file will be created inside the project folder
+DATABASE = os.path.join(app.root_path, "database.db")
 
 
 def get_db():
@@ -40,6 +42,11 @@ def init_db():
     conn.close()
 
 
+# IMPORTANT:
+# Initialize database when Flask/Gunicorn starts
+init_db()
+
+
 # ---------------- DASHBOARD ----------------
 
 @app.route("/")
@@ -62,7 +69,6 @@ def index():
 
     balance = income - expense
 
-    # Category-wise expense data for chart
     category_data = conn.execute("""
         SELECT category, SUM(amount) AS total
         FROM transactions
@@ -177,6 +183,8 @@ def history():
         "history.html",
         transactions=transactions
     )
+
+
 # ---------------- EDIT TRANSACTION ----------------
 
 @app.route("/edit/<int:transaction_id>", methods=["GET", "POST"])
@@ -230,6 +238,7 @@ def edit_transaction(transaction_id):
         transaction=transaction
     )
 
+
 # ---------------- DELETE TRANSACTION ----------------
 
 @app.route("/delete/<int:transaction_id>")
@@ -264,7 +273,6 @@ def budget():
         conn.execute("""
             INSERT INTO budget (amount, month)
             VALUES (?, ?)
-
             ON CONFLICT(month)
             DO UPDATE SET amount = excluded.amount
         """, (
@@ -309,5 +317,4 @@ def budget():
 # ---------------- RUN APPLICATION ----------------
 
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
