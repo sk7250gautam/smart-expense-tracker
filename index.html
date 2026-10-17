@@ -1,534 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Smart Expense Tracker</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #f5f7fb;
-    color: #1f2937;
-}
-
-.navbar {
-    background: #111827;
-    color: white;
-    padding: 18px 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.nav-links {
-    display: flex;
-    gap: 28px;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-}
-
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 40px 25px;
-}
-
-.hero {
-    background: white;
-    border-radius: 18px;
-    padding: 35px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,.08);
-    margin-bottom: 30px;
-}
-
-.hero h1 {
-    font-size: 36px;
-    margin-bottom: 10px;
-}
-
-.hero p {
-    color: #6b7280;
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 12px;
-}
-
-.btn {
-    display: inline-block;
-    padding: 12px 20px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.income-btn {
-    background: #16a34a;
-    color: white;
-}
-
-.expense-btn {
-    background: #dc2626;
-    color: white;
-}
-
-.summary {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    box-shadow: 0 5px 20px rgba(0,0,0,.07);
-}
-
-.card-icon {
-    font-size: 35px;
-}
-
-.card p {
-    color: #6b7280;
-}
-
-.card h2 {
-    margin-top: 8px;
-    font-size: 26px;
-}
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 25px;
-}
-
-.panel {
-    background: white;
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 5px 20px rgba(0,0,0,.07);
-}
-
-.panel-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.view-link {
-    color: #2563eb;
-    text-decoration: none;
-}
-
-.transaction {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 0;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.transaction-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.transaction-icon {
-    font-size: 25px;
-}
-
-.income-text {
-    color: #16a34a;
-    font-weight: bold;
-}
-
-.expense-text {
-    color: #dc2626;
-    font-weight: bold;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 30px;
-    color: #6b7280;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CYBERVAULT 3D // Smart Expense Tracker & Wealth Intelligence</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/static/css/style.css">
 </head>
+<body class="cyber-theme">
+  <!-- Background Ambient Glow & Grid -->
+  <div class="ambient-glow glow-cyan"></div>
+  <div class="ambient-glow glow-purple"></div>
+  <div class="cyber-grid-overlay"></div>
 
-<body>
+  <!-- Navigation / Top Header HUD -->
+  <header class="hud-header">
+    <div class="header-brand">
+      <div class="logo-mark">
+        <div class="logo-core"></div>
+        <div class="logo-ring"></div>
+      </div>
+      <div>
+        <h1 class="brand-title">CYBER<span class="gradient-text">VAULT</span> <span class="badge-version">3D v2.5</span></h1>
+        <p class="brand-sub">Next-Gen Spatial Financial Core & AI Telemetry</p>
+      </div>
+    </div>
 
-    <nav class="navbar">
+    <!-- Quick Stats Bar -->
+    <div class="hud-quick-stats">
+      <div class="stat-pill">
+        <span class="stat-label">FINANCIAL HEALTH</span>
+        <div class="health-indicator">
+          <div class="health-bar-mini" id="headerHealthBar" style="width: 82%;"></div>
+          <span class="health-val" id="headerHealthVal">82%</span>
+        </div>
+      </div>
 
-        <div class="logo">
-            💰 Smart Expense Tracker
+      <div class="stat-pill">
+        <span class="stat-label">CURRENCY</span>
+        <select id="currencySelector" class="cyber-select-mini">
+          <option value="INR" selected>₹ INR</option>
+          <option value="USD">$ USD</option>
+          <option value="EUR">€ EUR</option>
+          <option value="GBP">£ GBP</option>
+          <option value="JPY">¥ JPY</option>
+        </select>
+      </div>
+
+      <div class="stat-pill audio-toggle-container">
+        <button id="soundToggleBtn" class="cyber-icon-btn" title="Toggle Futuristic SFX">
+          <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Viewport Layout -->
+  <main class="dashboard-container">
+    
+    <!-- LEFT PANEL: Smart Quick Actions & AI Intelligence -->
+    <aside class="panel left-panel glass-panel">
+      <!-- AI Natural Language Smart Bar -->
+      <section class="section-card smart-nlp-card">
+        <div class="section-header">
+          <div class="header-icon"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h3>AI Smart Prompt Input</h3>
+            <span class="sub-text">Type naturally (e.g., "Spent 850 on grocery" or "Salary 65000")</span>
+          </div>
+        </div>
+        <form id="nlpForm" class="nlp-input-form">
+          <div class="nlp-input-wrapper">
+            <i class="fa-solid fa-wand-magic-sparkles nlp-icon"></i>
+            <input type="text" id="nlpInput" placeholder='Try: "Paid 1200 for petrol" or "450 coffee"' autocomplete="off" />
+            <button type="submit" class="cyber-btn primary-glow">
+              <span>Execute</span>
+              <i class="fa-solid fa-bolt"></i>
+            </button>
+          </div>
+          <div class="nlp-chips">
+            <span class="chip" data-example="Dinner with friends 1400">🍽️ Dinner 1400</span>
+            <span class="chip" data-example="Freelance payment 25000">💼 Freelance 25k</span>
+            <span class="chip" data-example="Uber ride 350">🚗 Uber 350</span>
+            <span class="chip" data-example="Monthly Gym 1800">💪 Gym 1800</span>
+          </div>
+        </form>
+      </section>
+
+      <!-- Key Balance Metrics Cards -->
+      <div class="metrics-grid">
+        <div class="metric-card balance-card">
+          <div class="metric-meta">
+            <span class="metric-title">TOTAL NET WORTH</span>
+            <span class="metric-trend positive" id="netWorthTrend"><i class="fa-solid fa-arrow-trend-up"></i> +14.2%</span>
+          </div>
+          <div class="metric-value font-cyber" id="totalBalanceDisplay">₹0</div>
+          <div class="metric-footer">
+            <span>Liquid Runway: <strong id="runwayDisplay">~7.8 mos</strong></span>
+          </div>
         </div>
 
-        <div class="nav-links">
-            <a href="/">Dashboard</a>
-            <a href="/history">History</a>
-            <a href="/budget">Budget</a>
+        <div class="metric-card income-card">
+          <div class="metric-meta">
+            <span class="metric-title">TOTAL INFLOW</span>
+            <i class="fa-solid fa-circle-arrow-down-left inflow-icon"></i>
+          </div>
+          <div class="metric-value font-cyber text-success" id="totalIncomeDisplay">₹0</div>
+          <div class="metric-footer">
+            <span id="incomeCount">0 transactions</span>
+          </div>
         </div>
 
-    </nav>
+        <div class="metric-card expense-card">
+          <div class="metric-meta">
+            <span class="metric-title">TOTAL OUTFLOW</span>
+            <i class="fa-solid fa-circle-arrow-up-right outflow-icon"></i>
+          </div>
+          <div class="metric-value font-cyber text-danger" id="totalExpenseDisplay">₹0</div>
+          <div class="metric-footer">
+            <span id="burnRateDisplay">Burn Rate: ₹0/day</span>
+          </div>
+        </div>
+      </div>
 
-
-    <main class="container">
-
-        <!-- HERO -->
-
-        <section class="hero">
-
+      <!-- Monthly Budget Progress & Telemetry -->
+      <section class="section-card budget-card">
+        <div class="section-header space-between">
+          <div class="flex-align">
+            <div class="header-icon"><i class="fa-solid fa-gauge-high"></i></div>
             <div>
-                <h1>Smart Expense Tracker</h1>
-
-                <p>
-                    Manage your money smarter and track your spending.
-                </p>
+              <h3>Monthly Target Vault</h3>
+              <span class="sub-text" id="budgetRangeLabel">Target vs Real-time burn</span>
             </div>
+          </div>
+          <button id="setBudgetBtn" class="cyber-btn-ghost mini-btn"><i class="fa-solid fa-pen"></i> Set Target</button>
+        </div>
+        
+        <div class="budget-progress-block">
+          <div class="budget-labels">
+            <span id="budgetSpent">Spent: ₹0</span>
+            <span id="budgetLimit">Limit: ₹60,000</span>
+          </div>
+          <div class="cyber-progress-track">
+            <div class="cyber-progress-fill" id="budgetProgressFill" style="width: 0%;"></div>
+          </div>
+          <div class="budget-status-row">
+            <span class="status-badge safe" id="budgetStatusBadge">Optimal Status</span>
+            <span id="budgetRemaining">₹60,000 Available</span>
+          </div>
+        </div>
+      </section>
 
-            <div class="hero-buttons">
+      <!-- AI Financial Copilot Insights -->
+      <section class="section-card copilot-card">
+        <div class="section-header">
+          <div class="header-icon pulse-glow"><i class="fa-solid fa-microchip"></i></div>
+          <div>
+            <h3>Neural Financial Insights</h3>
+            <span class="sub-text">Autonomous pattern analysis</span>
+          </div>
+        </div>
+        <div class="insights-container" id="insightsContainer">
+          <!-- Dynamic AI Insights will be generated here -->
+        </div>
+      </section>
+    </aside>
 
-                <a href="/add-income" class="btn income-btn">
-                    + Add Income
-                </a>
+    <!-- CENTER CANVAS: Spatial 3D Interactive Three.js Viewport -->
+    <section class="spatial-viewport glass-panel">
+      <!-- 3D Overlay HUD Controls -->
+      <div class="viewport-hud-top">
+        <div class="hud-mode-tags">
+          <button class="mode-tag active" data-view="holo-vault">
+            <i class="fa-solid fa-cube"></i> Holographic Core
+          </button>
+          <button class="mode-tag" data-view="category-towers">
+            <i class="fa-solid fa-chart-column"></i> 3D Expense Towers
+          </button>
+          <button class="mode-tag" data-view="galaxy-ring">
+            <i class="fa-solid fa-circle-nodes"></i> Orbital Rings
+          </button>
+        </div>
 
-                <a href="/add-expense" class="btn expense-btn">
-                    + Add Expense
-                </a>
+        <div class="viewport-hud-actions">
+          <button id="resetCamBtn" class="hud-circle-btn" title="Reset Camera"><i class="fa-solid fa-arrows-rotate"></i></button>
+          <button id="autoRotateToggle" class="hud-circle-btn active" title="Toggle 3D Orbit Spin"><i class="fa-solid fa-compass"></i></button>
+          <button id="fullscreen3dBtn" class="hud-circle-btn" title="Full Screen View"><i class="fa-solid fa-expand"></i></button>
+        </div>
+      </div>
 
+      <!-- 3D Canvas Mount Point -->
+      <div id="threeCanvasContainer" class="three-canvas-container">
+        <!-- Three.js WebGL canvas injected here -->
+      </div>
+
+      <!-- 3D Interactive Tooltip Hover Card -->
+      <div id="threeTooltip" class="three-tooltip glass-tooltip hidden">
+        <div class="tooltip-header">
+          <span class="tooltip-badge" id="ttBadge">FOOD</span>
+          <span class="tooltip-percent" id="ttPercent">28%</span>
+        </div>
+        <div class="tooltip-amount" id="ttAmount">₹14,500</div>
+        <div class="tooltip-sub" id="ttCount">8 transactions</div>
+        <div class="tooltip-hint">Click 3D tower to isolate category</div>
+      </div>
+
+      <!-- Bottom HUD Visualizer Ribbon -->
+      <div class="viewport-hud-bottom">
+        <div class="scene-status">
+          <span class="blinking-dot"></span>
+          <span>SPATIAL ENGINE: <strong>60 FPS ACTIVE</strong></span>
+          <span class="divider">|</span>
+          <span>TOUCH/DRAG TO ROTATE &bull; SCROLL TO ZOOM</span>
+        </div>
+        <div class="quick-add-btn-wrap">
+          <button id="openAddModalBtn" class="cyber-btn primary-glow add-tx-btn">
+            <i class="fa-solid fa-plus"></i>
+            <span>Log Transaction</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Category Breakdown, Telemetry & Ledger -->
+    <aside class="panel right-panel glass-panel">
+      <!-- 3D Category Distribution Bars -->
+      <section class="section-card category-breakdown-card">
+        <div class="section-header space-between">
+          <div class="flex-align">
+            <div class="header-icon"><i class="fa-solid fa-chart-pie"></i></div>
+            <div>
+              <h3>Category Allocation</h3>
+              <span class="sub-text">Interactive 3D Mapped Distribution</span>
             </div>
+          </div>
+          <button id="clearCategoryFilter" class="clear-filter-btn hidden">
+            <i class="fa-solid fa-xmark"></i> Show All
+          </button>
+        </div>
+        <div class="category-bars-list" id="categoryBarsList">
+          <!-- Dynamic category breakdown items -->
+        </div>
+      </section>
 
-        </section>
-
-
-        <!-- SUMMARY -->
-
-        <section class="summary">
-
-            <div class="card">
-
-                <div class="card-icon">
-                    💰
-                </div>
-
-                <div>
-                    <p>Total Balance</p>
-
-                    <h2>
-                        ₹{{ "%.2f"|format(balance) }}
-                    </h2>
-                </div>
-
+      <!-- Recent Transactions Ledger -->
+      <section class="section-card ledger-card">
+        <div class="section-header space-between">
+          <div class="flex-align">
+            <div class="header-icon"><i class="fa-solid fa-receipt"></i></div>
+            <div>
+              <h3>Telemetry Ledger</h3>
+              <span class="sub-text">Real-time ledger feed</span>
             </div>
+          </div>
+          <div class="ledger-actions">
+            <button id="exportCsvBtn" class="cyber-icon-btn mini" title="Export CSV"><i class="fa-solid fa-file-csv"></i></button>
+            <button id="exportJsonBtn" class="cyber-icon-btn mini" title="Backup JSON Data"><i class="fa-solid fa-download"></i></button>
+            <button id="resetDataBtn" class="cyber-icon-btn mini danger-hover" title="Reset Demo Data"><i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        </div>
 
+        <!-- Filter & Search Controls -->
+        <div class="ledger-controls">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchTxInput" placeholder="Search by note, tag..." />
+          </div>
+          <div class="filter-type-group">
+            <button class="filter-pill active" data-filter="all">All</button>
+            <button class="filter-pill" data-filter="expense">Expense</button>
+            <button class="filter-pill" data-filter="income">Income</button>
+          </div>
+        </div>
 
-            <div class="card">
+        <!-- Transaction Feed -->
+        <div class="transaction-list" id="transactionList">
+          <!-- Dynamically populated transactions -->
+        </div>
+      </section>
+    </aside>
 
-                <div class="card-icon">
-                    📈
-                </div>
+  </main>
 
-                <div>
-                    <p>Total Income</p>
+  <!-- MODAL: Add / Edit Transaction -->
+  <div class="modal-overlay hidden" id="txModalOverlay">
+    <div class="cyber-modal glass-modal">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon"><i class="fa-solid fa-plus-minus"></i></div>
+          <h2 id="modalTitle">Register Transaction</h2>
+        </div>
+        <button class="modal-close-btn" id="closeTxModalBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
 
-                    <h2>
-                        ₹{{ "%.2f"|format(income) }}
-                    </h2>
-                </div>
+      <form id="txForm" class="modal-form">
+        <input type="hidden" id="txId" value="">
 
+        <!-- Type Selector -->
+        <div class="form-group">
+          <label>TRANSACTION TYPE</label>
+          <div class="type-toggle-group">
+            <label class="type-option expense-opt">
+              <input type="radio" name="txType" value="expense" checked>
+              <span><i class="fa-solid fa-arrow-trend-down"></i> Outflow (Expense)</span>
+            </label>
+            <label class="type-option income-opt">
+              <input type="radio" name="txType" value="income">
+              <span><i class="fa-solid fa-arrow-trend-up"></i> Inflow (Income)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Amount & Currency -->
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label>AMOUNT (<span class="current-symbol">₹</span>)</label>
+            <div class="input-with-symbol">
+              <span class="currency-symbol-tag" id="formCurrencyTag">₹</span>
+              <input type="number" step="any" min="0.01" id="txAmount" placeholder="0.00" required>
             </div>
-
-
-            <div class="card">
-
-                <div class="card-icon">
-                    📉
-                </div>
-
-                <div>
-                    <p>Total Expense</p>
-
-                    <h2>
-                        ₹{{ "%.2f"|format(expense) }}
-                    </h2>
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- TRANSACTIONS + INSIGHTS -->
-
-        <section class="dashboard-grid">
-
-            <!-- RECENT TRANSACTIONS -->
-
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <h2>
-                        Recent Transactions
-                    </h2>
-
-                    <a href="/history" class="view-link">
-                        View All →
-                    </a>
-
-                </div>
-
-
-                {% if transactions %}
-
-                    {% for transaction in transactions[:5] %}
-
-                        <div class="transaction">
-
-                            <div class="transaction-left">
-
-                                <div class="transaction-icon">
-                                    {% if transaction["type"] == "income" %}
-                                        💰
-                                    {% else %}
-                                        💸
-                                    {% endif %}
-                                </div>
-
-                                <div>
-
-                                    <h3>
-                                        {{ transaction["category"] }}
-                                    </h3>
-
-                                    <p>
-                                        {{ transaction["date"] }}
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="transaction-right">
-
-                                {% if transaction["type"] == "income" %}
-
-                                    <span class="income-text">
-                                        +₹{{ "%.2f"|format(transaction["amount"]) }}
-                                    </span>
-
-                                {% else %}
-
-                                    <span class="expense-text">
-                                        -₹{{ "%.2f"|format(transaction["amount"]) }}
-                                    </span>
-
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-                    {% endfor %}
-
-                {% else %}
-
-                    <div class="empty-state">
-
-                        <p>
-                            No transactions yet.
-                        </p>
-
-                        <a href="/add-income" class="btn income-btn">
-                            Add Your First Income
-                        </a>
-
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-
-            <!-- EXPENSE INSIGHTS -->
-
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <h2>
-                        Expense Insights
-                    </h2>
-
-                </div>
-
-
-                {% if category_labels %}
-
-                    <div class="chart-container">
-
-                        <canvas id="expenseChart"></canvas>
-
-                    </div>
-
-                {% else %}
-
-                    <div class="empty-state">
-
-                        <p>
-                            No expense data available.
-                        </p>
-
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-        </section>
-
-
-        <!-- QUICK ACTIONS -->
-
-        <section class="quick-actions">
-
-            <a href="/add-income" class="quick-card">
-
-                <span>
-                    💰
-                </span>
-
-                <div>
-                    <h3>Add Income</h3>
-                    <p>Record your income</p>
-                </div>
-
-            </a>
-
-
-            <a href="/add-expense" class="quick-card">
-
-                <span>
-                    💸
-                </span>
-
-                <div>
-                    <h3>Add Expense</h3>
-                    <p>Record your spending</p>
-                </div>
-
-            </a>
-
-
-            <a href="/history" class="quick-card">
-
-                <span>
-                    📊
-                </span>
-
-                <div>
-                    <h3>View History</h3>
-                    <p>See all transactions</p>
-                </div>
-
-            </a>
-
-
-            <a href="/budget" class="quick-card">
-
-                <span>
-                    🎯
-                </span>
-
-                <div>
-                    <h3>Budget</h3>
-                    <p>Manage your budget</p>
-                </div>
-
-            </a>
-
-        </section>
-
-    </main>
-
-
-    <!-- CHART -->
-
-    {% if category_labels %}
-
-    <script>
-
-        const categoryLabels = {{ category_labels | tojson }};
-        const categoryValues = {{ category_values | tojson }};
-
-        const ctx = document.getElementById("expenseChart");
-
-        new Chart(ctx, {
-
-            type: "doughnut",
-
-            data: {
-
-                labels: categoryLabels,
-
-                datasets: [{
-
-                    label: "Expenses",
-
-                    data: categoryValues
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                maintainAspectRatio: false
-
-            }
-
-        });
-
-    </script>
-
-    {% endif %}
-
-
+          </div>
+          <div class="form-group flex-1">
+            <label>DATE</label>
+            <input type="date" id="txDate" required>
+          </div>
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label>CATEGORY CLASSIFICATION</label>
+          <select id="txCategory" class="cyber-select" required>
+            <option value="Food & Dining">🍽️ Food & Dining</option>
+            <option value="Shopping & Tech">🛍️ Shopping & Tech</option>
+            <option value="Housing & Bills">🏠 Housing & Bills</option>
+            <option value="Transport & Travel">🚗 Transport & Travel</option>
+            <option value="Entertainment">🎮 Entertainment & Media</option>
+            <option value="Healthcare">💊 Healthcare & Wellness</option>
+            <option value="Investment">📈 Investment & Stocks</option>
+            <option value="Salary & Wages">💼 Salary & Wages</option>
+            <option value="Freelance & Side">🚀 Freelance & Business</option>
+            <option value="Other">✨ Other / Miscellaneous</option>
+          </select>
+        </div>
+
+        <!-- Note / Title -->
+        <div class="form-group">
+          <label>MEMO / DESCRIPTION</label>
+          <input type="text" id="txTitle" placeholder="e.g. Swiggy order, MacBook EMI, Client retainer" required>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cyber-btn-ghost" id="cancelTxBtn">Abort</button>
+          <button type="submit" class="cyber-btn primary-glow">
+            <span>Commit Entry</span>
+            <i class="fa-solid fa-check"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Budget Config -->
+  <div class="modal-overlay hidden" id="budgetModalOverlay">
+    <div class="cyber-modal glass-modal small">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon"><i class="fa-solid fa-gauge-high"></i></div>
+          <h2>Configure Monthly Budget</h2>
+        </div>
+        <button class="modal-close-btn" id="closeBudgetModalBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="budgetForm" class="modal-form">
+        <div class="form-group">
+          <label>MONTHLY TARGET SPENDING LIMIT (<span class="current-symbol">₹</span>)</label>
+          <input type="number" step="100" min="1000" id="budgetInputModal" placeholder="60000" required>
+          <small class="form-hint">CYBERVAULT will dynamically adjust 3D alerts and health indicators.</small>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="cyber-btn-ghost" id="cancelBudgetBtn">Cancel</button>
+          <button type="submit" class="cyber-btn primary-glow">Update Target</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts: Three.js, OrbitControls, GSAP, Canvas-Confetti -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Modular Application Scripts -->
+  <script src="/static/js/sound.js"></script>
+  <script src="/static/js/three-scene.js"></script>
+  <script src="/static/js/app.js"></script>
 </body>
-
 </html>
